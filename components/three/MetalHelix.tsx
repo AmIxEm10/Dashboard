@@ -67,23 +67,23 @@ export default function MetalHelix() {
     <group ref={group}>
       <mesh geometry={strandA}>
         <meshStandardMaterial
-          color="#c8ced6"
+          color="#0b2250"
           metalness={0.95}
-          roughness={0.18}
+          roughness={0.2}
         />
       </mesh>
       <mesh geometry={strandB}>
         <meshStandardMaterial
-          color="#8a919c"
+          color="#13357a"
           metalness={0.9}
           roughness={0.28}
         />
       </mesh>
       <mesh geometry={core}>
         <meshStandardMaterial
-          color="#ff4d1f"
-          emissive="#ff4d1f"
-          emissiveIntensity={1.6}
+          color="#e6007e"
+          emissive="#e6007e"
+          emissiveIntensity={1.8}
           metalness={0.2}
           roughness={0.4}
         />
@@ -94,7 +94,7 @@ export default function MetalHelix() {
         <mesh key={s} position={[0, s * 1.65, 0]}>
           <cylinderGeometry args={[1.0, 1.0, 0.08, 64]} />
           <meshStandardMaterial
-            color="#1a1d24"
+            color="#061433"
             metalness={0.9}
             roughness={0.35}
           />
@@ -109,7 +109,7 @@ export default function MetalHelix() {
           <mesh key={i} position={[0, y, 0]} rotation={[Math.PI / 2, 0, 0]}>
             <torusGeometry args={[0.86, 0.008, 8, 48]} />
             <meshStandardMaterial
-              color="#8a919c"
+              color="#1c44a0"
               metalness={0.9}
               roughness={0.35}
             />

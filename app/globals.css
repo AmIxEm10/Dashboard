@@ -3,16 +3,40 @@
 @tailwind utilities;
 
 :root {
-  --bg: #070709;
-  --surface: #0b0c0f;
-  --surface-elev: #111318;
-  --ink: #e4e7ec;
-  --ink-dim: #8a919c;
-  --ink-faint: #4a4f5a;
-  --line: rgba(228, 231, 236, 0.08);
-  --line-strong: rgba(228, 231, 236, 0.16);
-  --ignition: #ff4d1f;
-  --ignition-glow: rgba(255, 77, 31, 0.35);
+  color-scheme: light;
+
+  /* Surfaces */
+  --paper: #ffffff;
+  --paper-soft: #f5f7fa;
+  --paper-elev: #e9edf3;
+  --paper-line: #dfe4ed;
+
+  /* Ink */
+  --ink: #0a1330;
+  --ink-muted: #4a5578;
+  --ink-faint: #8a94ad;
+
+  /* Brand */
+  --brand: #0b2250;
+  --brand-700: #13357a;
+  --brand-500: #3f6ed6;
+
+  /* Accent (swoosh) */
+  --accent: #e6007e;
+  --accent-600: #c00068;
+  --accent-glow: rgba(230, 0, 126, 0.32);
+
+  /* Lines */
+  --line: rgba(10, 19, 48, 0.08);
+  --line-strong: rgba(10, 19, 48, 0.16);
+
+  /* Legacy aliases — keep existing class names compiling.
+     New work should use paper-* / ink-* / brand-* / accent-* tokens. */
+  --bg: var(--paper);
+  --surface: var(--paper-soft);
+  --surface-elev: var(--paper-elev);
+  --ignition: var(--accent);
+  --ignition-glow: var(--accent-glow);
 }
 
 html,
@@ -21,7 +45,6 @@ body {
 }
 
 html {
-  color-scheme: dark;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   /* Lenis owns scroll; keep native smooth off */
@@ -29,9 +52,9 @@ html {
 }
 
 body {
-  background: var(--bg);
+  background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-display), system-ui, sans-serif;
+  font-family: var(--font-body), system-ui, sans-serif;
   font-feature-settings: "ss01", "cv11", "calt";
   overflow-x: hidden;
 }
@@ -52,11 +75,11 @@ html.lenis body {
 }
 
 ::selection {
-  background: var(--ignition);
-  color: var(--bg);
+  background: var(--accent);
+  color: #ffffff;
 }
 
-/* Subtle grid texture for industrial feel */
+/* Subtle brand grid — navy hairlines on paper */
 .bg-grid {
   background-image:
     linear-gradient(to right, var(--line) 1px, transparent 1px),
@@ -70,26 +93,30 @@ html.lenis body {
     @apply mx-auto w-full max-w-[1440px] px-6 sm:px-10;
   }
   .eyebrow {
-    @apply font-mono text-xs uppercase tracking-widest text-steel-400;
+    @apply font-mono text-xs uppercase tracking-widest text-ink-500;
   }
   .display {
     font-family: var(--font-display);
     font-optical-sizing: auto;
-    letter-spacing: -0.04em;
-    line-height: 0.92;
-    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 0.94;
+    font-weight: 700;
+    color: var(--brand);
   }
   .hairline {
     @apply h-px w-full bg-[color:var(--line)];
   }
   .chip {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-[color:var(--line-strong)] bg-carbon-800/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-steel-300 backdrop-blur;
+    @apply inline-flex items-center gap-1.5 rounded-full border border-[color:var(--line-strong)] bg-paper-soft/80 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-ink-500 backdrop-blur;
   }
   .btn-primary {
-    @apply inline-flex items-center gap-3 rounded-full bg-ignition px-6 py-3 font-mono text-xs uppercase tracking-widest text-carbon-950 transition-transform will-change-transform hover:scale-[1.02];
+    @apply inline-flex items-center gap-3 rounded-full bg-accent-500 px-6 py-3 font-mono text-xs uppercase tracking-widest text-white shadow-accent transition-all will-change-transform hover:-translate-y-px hover:bg-accent-600;
   }
   .btn-ghost {
-    @apply inline-flex items-center gap-3 rounded-full border border-[color:var(--line-strong)] px-6 py-3 font-mono text-xs uppercase tracking-widest text-steel-100 transition-colors hover:border-ignition hover:text-ignition;
+    @apply inline-flex items-center gap-3 rounded-full border border-[color:var(--line-strong)] px-6 py-3 font-mono text-xs uppercase tracking-widest text-brand transition-colors hover:border-accent hover:text-accent;
+  }
+  .btn-navy {
+    @apply inline-flex items-center gap-3 rounded-full bg-brand px-6 py-3 font-mono text-xs uppercase tracking-widest text-white shadow-brand-md transition-all hover:-translate-y-px hover:bg-brand-800;
   }
 }
 
@@ -100,10 +127,10 @@ html.lenis body {
   .text-pretty {
     text-wrap: pretty;
   }
-  .radial-ignition {
+  .radial-accent {
     background: radial-gradient(
       40% 50% at 50% 40%,
-      var(--ignition-glow) 0%,
+      var(--accent-glow) 0%,
       transparent 70%
     );
   }

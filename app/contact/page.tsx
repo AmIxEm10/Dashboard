@@ -34,17 +34,17 @@ export default function ContactPage() {
       <div className="container-page">
         <div className="flex items-center gap-3">
           <span className="chip">
-            <span className="h-1.5 w-1.5 rounded-full bg-ignition" />
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
             CGR.05 · Contact
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-widest text-steel-400">
+          <span className="font-mono text-[10px] uppercase tracking-widest text-ink-500">
             — Un mail vaut mille plans
           </span>
         </div>
 
         <h1 className="display mt-10 text-[clamp(2.75rem,7vw,6.5rem)] text-balance">
           Parlez-nous de la{" "}
-          <span className="italic text-ignition">pièce</span> —
+          <span className="italic text-accent">pièce</span> —
           <br />
           on s'occupe du reste.
         </h1>
@@ -62,20 +62,20 @@ export default function ContactPage() {
               <div className="mt-4 flex items-start gap-4">
                 <div
                   aria-hidden
-                  className="grid h-12 w-12 place-items-center rounded-full border border-ignition/50 bg-ignition/10 font-mono text-xs text-ignition"
+                  className="grid h-12 w-12 place-items-center rounded-full border border-accent/50 bg-accent/10 font-mono text-xs font-semibold text-accent"
                 >
                   CM
                 </div>
                 <div>
-                  <div className="font-display text-lg text-steel-100">
+                  <div className="font-display text-lg font-semibold text-brand">
                     Claire Mercier
                   </div>
-                  <div className="mt-1 text-xs text-steel-400">
+                  <div className="mt-1 text-xs text-ink-500">
                     Responsable projets industriels
                   </div>
                   <a
                     href="mailto:projets@cgr-intl.example"
-                    className="mt-3 inline-block font-mono text-xs text-ignition hover:underline"
+                    className="mt-3 inline-block font-mono text-xs text-accent hover:underline"
                   >
                     projets@cgr-intl.example
                   </a>
@@ -85,32 +85,34 @@ export default function ContactPage() {
 
             <div>
               <p className="eyebrow">— Sites</p>
-              <ul className="mt-4 grid gap-px bg-[color:var(--line)]">
+              <ul className="mt-4 grid gap-px bg-paper-line">
                 {sites.map((s) => (
                   <li
                     key={s.city}
-                    className="flex items-center justify-between bg-[color:var(--bg)] py-4 font-mono text-xs"
+                    className="flex items-center justify-between bg-paper py-4 px-4 font-mono text-xs"
                   >
-                    <span className="text-steel-100">
+                    <span className="text-brand">
                       {s.city},{" "}
-                      <span className="text-steel-400">{s.country}</span>
+                      <span className="text-ink-500">{s.country}</span>
                     </span>
-                    <span className="uppercase tracking-widest text-steel-400">
+                    <span className="uppercase tracking-widest text-ink-500">
                       {s.role}
                     </span>
                   </li>
                 ))}
               </ul>
-              <p className="mt-4 font-mono text-[10px] uppercase tracking-widest text-steel-400">
+              <p className="mt-4 font-mono text-[10px] uppercase tracking-widest text-ink-500">
                 15 sites · 4 continents · 3 200 collaborateurs
               </p>
             </div>
 
-            <div className="rounded-sm border border-[color:var(--line-strong)] bg-carbon-900/60 p-6">
+            <div className="rounded-sm border border-[color:var(--line-strong)] bg-paper-soft p-6 shadow-brand-sm">
               <p className="eyebrow">— SLA réponse</p>
               <div className="mt-3 flex items-baseline gap-3">
-                <span className="font-mono text-4xl text-ignition">48h</span>
-                <span className="text-xs text-steel-400">
+                <span className="font-display text-4xl font-bold text-accent">
+                  48h
+                </span>
+                <span className="text-xs text-ink-500">
                   — première analyse technique, chiffrée.
                 </span>
               </div>

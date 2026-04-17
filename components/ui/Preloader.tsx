@@ -148,17 +148,17 @@ export default function Preloader() {
       aria-hidden
       className="pointer-events-auto fixed inset-0 z-[100]"
     >
-      {/* Two shutter blades — solid carbon with a faint scan-line grain */}
+      {/* Two shutter blades — brand navy with subtle paper grain */}
       <div
         ref={topRef}
-        className="absolute inset-x-0 top-0 h-1/2 overflow-hidden border-b border-[color:var(--line)] bg-carbon-950 will-change-transform"
+        className="absolute inset-x-0 top-0 h-1/2 overflow-hidden bg-brand will-change-transform"
       >
         <Grain />
         <CornerMarkers side="top" />
       </div>
       <div
         ref={bottomRef}
-        className="absolute inset-x-0 bottom-0 h-1/2 overflow-hidden border-t border-[color:var(--line)] bg-carbon-950 will-change-transform"
+        className="absolute inset-x-0 bottom-0 h-1/2 overflow-hidden bg-brand will-change-transform"
       >
         <Grain />
         <CornerMarkers side="bottom" />
@@ -170,43 +170,43 @@ export default function Preloader() {
         className="pointer-events-none absolute inset-0 flex items-center justify-center px-6"
       >
         <div className="flex w-full max-w-md flex-col items-start gap-6">
-          <div className="flex w-full items-center justify-between font-mono text-[10px] uppercase tracking-widest text-steel-400">
+          <div className="flex w-full items-center justify-between font-mono text-[10px] uppercase tracking-widest text-white/60">
             <span className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-ignition" />
-              CGR.00 · Calibration
+              <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-accent" />
+              CGR · Form your world.
             </span>
             <span>{active ? "▸ Streaming" : "▸ Ready"}</span>
           </div>
 
           <div className="flex items-baseline gap-3">
-            <span className="font-mono text-[clamp(4rem,12vw,8rem)] leading-none text-ignition">
+            <span className="font-display text-[clamp(4rem,12vw,8rem)] font-bold leading-none text-accent">
               {pctStr}
             </span>
-            <span className="font-mono text-lg text-steel-400">/ 100</span>
+            <span className="font-mono text-lg text-white/50">/ 100</span>
           </div>
 
           <div className="w-full">
-            <div className="relative h-px w-full bg-[color:var(--line-strong)]">
+            <div className="relative h-px w-full bg-white/20">
               <div
                 ref={barRef}
-                className="absolute inset-0 origin-left bg-ignition"
+                className="absolute inset-0 origin-left bg-accent"
                 style={{ transform: "scaleX(0)" }}
               />
             </div>
-            <div className="mt-3 flex w-full items-center justify-between font-mono text-[10px] uppercase tracking-widest text-steel-400">
+            <div className="mt-3 flex w-full items-center justify-between font-mono text-[10px] uppercase tracking-widest text-white/60">
               <span>Matériaux · shaders · hdri</span>
-              <span className="text-steel-300">BOOT.SEQ.04</span>
+              <span className="text-white/80">BOOT.SEQ.04</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Bottom-left build tag — "it's a real machine" detail */}
-      <div className="pointer-events-none absolute bottom-6 left-6 flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest text-steel-400">
+      <div className="pointer-events-none absolute bottom-6 left-6 flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest text-white/60">
         <span>▣ CGR International · Est. 1902</span>
       </div>
-      <div className="pointer-events-none absolute bottom-6 right-6 font-mono text-[10px] uppercase tracking-widest text-steel-400">
-        Kinetic Precision · v0.3
+      <div className="pointer-events-none absolute bottom-6 right-6 font-mono text-[10px] uppercase tracking-widest text-white/60">
+        Form your world. · v0.5
       </div>
     </div>
   );
@@ -240,7 +240,7 @@ function CornerMarkers({ side }: { side: "top" | "bottom" }) {
         <span
           key={c}
           aria-hidden
-          className={`pointer-events-none absolute h-3 w-3 border-ignition/70 ${c}`}
+          className={`pointer-events-none absolute h-3 w-3 border-accent/80 ${c}`}
         />
       ))}
     </>

@@ -64,29 +64,29 @@ export default function Template({ children }: { children: React.ReactNode }) {
         className="pointer-events-none fixed inset-0 z-[100]"
         aria-hidden
       >
-        <div className="shutter-top absolute inset-x-0 top-0 h-1/2 origin-top bg-carbon-900 will-change-transform">
+        <div className="shutter-top absolute inset-x-0 top-0 h-1/2 origin-top bg-brand will-change-transform">
           {/* top-left brand anchor visible during the transition */}
-          <div className="absolute bottom-4 left-10 font-mono text-[10px] uppercase tracking-widest text-steel-400">
+          <div className="absolute bottom-4 left-10 font-mono text-[10px] uppercase tracking-widest text-white/60">
             CGR · Chargement
           </div>
         </div>
-        <div className="shutter-bottom absolute inset-x-0 bottom-0 h-1/2 origin-bottom bg-carbon-900 will-change-transform">
+        <div className="shutter-bottom absolute inset-x-0 bottom-0 h-1/2 origin-bottom bg-brand will-change-transform">
           {/* bottom-right telemetry */}
-          <div className="absolute top-4 right-10 font-mono text-[10px] uppercase tracking-widest text-steel-400">
+          <div className="absolute top-4 right-10 font-mono text-[10px] uppercase tracking-widest text-white/60">
             Calibré · 60 FPS
           </div>
         </div>
 
-        {/* Thin ignition scan line sitting exactly at the seam */}
+        {/* Thin accent scan line sitting exactly at the seam */}
         <div
-          className="shutter-line absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-ignition"
+          className="shutter-line absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-accent"
           aria-hidden
         />
 
         {/* Centered brand label, visible during the curtain */}
         <div className="shutter-label absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <span className="display text-4xl tracking-tightest text-steel-100">
-            CGR<span className="italic text-ignition">.</span>
+          <span className="font-display text-4xl font-extrabold tracking-tight text-white">
+            CGR<span className="italic text-accent">.</span>
           </span>
         </div>
       </div>

@@ -163,7 +163,7 @@ export default function KineticForm() {
       />
 
       <div className="mt-2 flex items-center justify-between">
-        <p className="font-mono text-[10px] uppercase tracking-widest text-steel-400">
+        <p className="font-mono text-[10px] uppercase tracking-widest text-ink-500">
           {status === "sent"
             ? "● Message transmis — réponse sous 48h"
             : status === "sending"
@@ -175,7 +175,7 @@ export default function KineticForm() {
           ref={buttonRef}
           type="submit"
           disabled={status !== "idle"}
-          className="group relative inline-flex select-none items-center overflow-hidden rounded-full bg-ignition px-8 py-4 font-mono text-xs uppercase tracking-widest text-carbon-950 transition-colors will-change-transform disabled:opacity-70"
+          className="group relative inline-flex select-none items-center overflow-hidden rounded-full bg-accent px-8 py-4 font-mono text-xs uppercase tracking-widest text-white shadow-accent transition-colors will-change-transform hover:bg-accent-600 disabled:opacity-70"
         >
           <span
             aria-hidden
@@ -230,7 +230,7 @@ function Field({
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setValue(e.target.value),
     className:
-      "peer w-full bg-transparent px-0 pt-6 pb-3 font-display text-lg text-steel-100 outline-none placeholder:text-steel-400/60",
+      "peer w-full bg-transparent px-0 pt-6 pb-3 font-body text-lg text-ink outline-none placeholder:text-ink-300",
   };
 
   return (
@@ -238,8 +238,8 @@ function Field({
       <span
         className={`absolute left-0 font-mono text-xs uppercase tracking-widest transition-all duration-300 ${
           active
-            ? "top-0 text-[10px] text-ignition"
-            : "top-[1.45rem] text-steel-400"
+            ? "top-0 text-[10px] text-accent"
+            : "top-[1.45rem] text-ink-500"
         }`}
       >
         {label}
@@ -259,7 +259,7 @@ function Field({
       {/* Focus line — scales from center */}
       <span
         aria-hidden
-        className={`absolute bottom-0 left-0 h-px w-full origin-center bg-ignition transition-transform duration-500 ${
+        className={`absolute bottom-0 left-0 h-px w-full origin-center bg-accent transition-transform duration-500 ${
           focusField === name ? "scale-x-100" : "scale-x-0"
         }`}
       />

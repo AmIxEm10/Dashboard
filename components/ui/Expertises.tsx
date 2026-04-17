@@ -80,7 +80,7 @@ export default function Expertises() {
     <section
       ref={root}
       id="expertises"
-      className="relative z-10 border-t border-[color:var(--line)] bg-carbon-950/80 py-28 backdrop-blur-sm sm:py-36"
+      className="relative z-10 border-t border-[color:var(--line)] bg-paper-soft py-28 sm:py-36"
     >
       <div className="container-page">
         <div className="mb-20 grid gap-8 lg:grid-cols-[1fr_2fr]">
@@ -88,10 +88,10 @@ export default function Expertises() {
           <div>
             <h2 className="display text-5xl text-balance sm:text-6xl lg:text-7xl">
               Quatre métiers, une même{" "}
-              <span className="italic text-ignition">obsession</span>&nbsp;:
-              la matière maîtrisée.
+              <span className="italic text-accent">obsession</span>&nbsp;: la
+              matière maîtrisée.
             </h2>
-            <p className="mt-8 max-w-2xl text-lg text-steel-300 text-pretty">
+            <p className="mt-8 max-w-2xl text-lg text-ink-500 text-pretty">
               Nos équipes conçoivent, testent et produisent des composants
               invisibles mais critiques. Ils arment les ceintures de
               sécurité, les injecteurs, les actuateurs aéronautiques, les
@@ -100,27 +100,27 @@ export default function Expertises() {
           </div>
         </div>
 
-        <ul className="grid gap-px bg-[color:var(--line-strong)] md:grid-cols-2">
+        <ul className="grid gap-px bg-paper-line md:grid-cols-2">
           {items.map((item) => (
             <li
               key={item.code}
               data-card
-              className="group relative flex flex-col gap-6 bg-carbon-950 p-8 transition-colors hover:bg-carbon-900 sm:p-10"
+              className="group relative flex flex-col gap-6 bg-paper p-8 transition-colors hover:bg-paper-elev sm:p-10"
             >
               <div className="flex items-baseline justify-between">
-                <span className="font-mono text-xs uppercase tracking-widest text-ignition">
+                <span className="font-mono text-xs uppercase tracking-widest text-accent">
                   {item.code} /
                 </span>
-                <span className="font-mono text-[10px] uppercase tracking-widest text-steel-400 transition-colors group-hover:text-ignition">
+                <span className="font-mono text-[10px] uppercase tracking-widest text-ink-500 transition-colors group-hover:text-accent">
                   → Explorer
                 </span>
               </div>
 
-              <h3 className="display text-3xl text-steel-100 sm:text-4xl">
+              <h3 className="display text-3xl text-brand sm:text-4xl">
                 {item.title}
               </h3>
 
-              <p className="max-w-lg text-steel-300 text-pretty">{item.body}</p>
+              <p className="max-w-lg text-ink-500 text-pretty">{item.body}</p>
 
               <div className="mt-auto flex flex-wrap gap-2 pt-4">
                 {item.tags.map((t) => (
@@ -131,10 +131,10 @@ export default function Expertises() {
               </div>
 
               {/* Corner marks */}
-              <span className="pointer-events-none absolute left-4 top-4 h-3 w-3 border-l border-t border-steel-400/30" />
-              <span className="pointer-events-none absolute right-4 top-4 h-3 w-3 border-r border-t border-steel-400/30" />
-              <span className="pointer-events-none absolute left-4 bottom-4 h-3 w-3 border-l border-b border-steel-400/30" />
-              <span className="pointer-events-none absolute right-4 bottom-4 h-3 w-3 border-r border-b border-steel-400/30" />
+              <span className="pointer-events-none absolute left-4 top-4 h-3 w-3 border-l border-t border-ink-300/40" />
+              <span className="pointer-events-none absolute right-4 top-4 h-3 w-3 border-r border-t border-ink-300/40" />
+              <span className="pointer-events-none absolute left-4 bottom-4 h-3 w-3 border-l border-b border-ink-300/40" />
+              <span className="pointer-events-none absolute right-4 bottom-4 h-3 w-3 border-r border-b border-ink-300/40" />
             </li>
           ))}
         </ul>

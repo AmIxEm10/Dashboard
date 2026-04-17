@@ -108,7 +108,7 @@ export default function IndustriesScroller() {
     >
       {/* Grid + glow bg (above canvas, below content) */}
       <div className="bg-grid pointer-events-none absolute inset-0 opacity-30" aria-hidden />
-      <div className="radial-ignition pointer-events-none absolute inset-0 opacity-50" aria-hidden />
+      <div className="radial-accent pointer-events-none absolute inset-0 opacity-40" aria-hidden />
 
       <div className="container-page relative grid h-full grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         {/* LEFT — text panels (cross-fading) */}
@@ -126,29 +126,31 @@ export default function IndustriesScroller() {
               }`}
             >
               <div className="mb-6 flex items-baseline gap-4 font-mono text-xs uppercase tracking-widest">
-                <span className="text-ignition">{ind.code} / {String(industries.length).padStart(2, "0")}</span>
+                <span className="text-accent">
+                  {ind.code} / {String(industries.length).padStart(2, "0")}
+                </span>
                 <span className="h-px flex-1 bg-[color:var(--line-strong)]" />
-                <span className="text-steel-400">Industrie</span>
+                <span className="text-ink-500">Industrie</span>
               </div>
 
               <h2 className="display text-5xl text-balance sm:text-6xl lg:text-7xl">
                 {ind.name}
               </h2>
-              <p className="italic mt-4 text-xl text-ignition sm:text-2xl">
+              <p className="italic mt-4 text-xl text-accent sm:text-2xl">
                 {ind.lede}
               </p>
 
-              <p className="mt-8 max-w-xl text-steel-300 text-pretty">
+              <p className="mt-8 max-w-xl text-ink-500 text-pretty">
                 {ind.body}
               </p>
 
               <dl className="mt-10 grid max-w-lg grid-cols-2 gap-x-8 gap-y-5">
                 {ind.facts.map(([k, v]) => (
                   <div key={k}>
-                    <dt className="font-mono text-[10px] uppercase tracking-widest text-steel-400">
+                    <dt className="font-mono text-[10px] uppercase tracking-widest text-ink-500">
                       {k}
                     </dt>
-                    <dd className="mt-1 font-mono text-2xl text-steel-100">
+                    <dd className="mt-1 font-display text-2xl font-bold text-brand">
                       {v}
                     </dd>
                   </div>
@@ -168,8 +170,8 @@ export default function IndustriesScroller() {
 
         {/* RIGHT — progress rail + stage indicator (canvas renders behind) */}
         <div className="relative flex h-[70vh] flex-col justify-between">
-          <div className="flex items-center justify-end gap-4 font-mono text-[10px] uppercase tracking-widest text-steel-400">
-            <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-ignition" />
+          <div className="flex items-center justify-end gap-4 font-mono text-[10px] uppercase tracking-widest text-ink-500">
+            <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-accent" />
             Forging · Live
           </div>
 
@@ -179,28 +181,28 @@ export default function IndustriesScroller() {
                 key={ind.code}
                 className={`flex items-center justify-end gap-4 font-mono text-xs uppercase tracking-widest transition-colors ${
                   active === i
-                    ? "text-ignition"
+                    ? "text-accent"
                     : active > i
-                      ? "text-steel-100"
-                      : "text-steel-400"
+                      ? "text-brand"
+                      : "text-ink-400"
                 }`}
               >
                 <span>{ind.name}</span>
                 <span
                   className={`h-px transition-all ${
                     active === i
-                      ? "w-16 bg-ignition"
+                      ? "w-16 bg-accent"
                       : active > i
-                        ? "w-10 bg-steel-100/40"
-                        : "w-6 bg-steel-400/30"
+                        ? "w-10 bg-brand/40"
+                        : "w-6 bg-ink-300/40"
                   }`}
                 />
-                <span className="w-6 text-left text-steel-400">{ind.code}</span>
+                <span className="w-6 text-left text-ink-400">{ind.code}</span>
               </li>
             ))}
           </ol>
 
-          <p className="text-right font-mono text-[10px] uppercase tracking-widest text-steel-400">
+          <p className="text-right font-mono text-[10px] uppercase tracking-widest text-ink-500">
             Scroll ↓ pour forger la matière
           </p>
         </div>

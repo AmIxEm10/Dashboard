@@ -1,9 +1,11 @@
 import Link from "next/link";
+import BrandSwoosh from "./BrandSwoosh";
 
 /**
- * Footer — industrial closer. OLED-black background, JetBrains Mono
- * typography, ignition-orange on hover. Certifications are the
- * primary asset here — they are what a B2B buyer scans for first.
+ * Footer — industrial closer in deep brand navy, reinforcing the CGR
+ * identity on every page. Certifications are the primary asset here
+ * (B2B buyers scan for them first); links subtly flip to magenta on
+ * hover via the accent-scaling underline.
  */
 
 const certifications = [
@@ -53,32 +55,48 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative z-10 mt-24 border-t border-[color:var(--line)] bg-[#050507] text-steel-300">
-      <div className="container-page py-20">
+    <footer className="relative z-10 mt-24 overflow-hidden bg-brand text-white/80">
+      {/* Oversized brand swoosh as backdrop — echoes the logo arc */}
+      <BrandSwoosh
+        className="pointer-events-none absolute -right-32 -top-20 h-[120%] w-[140%] opacity-[0.12]"
+        strokeWidth={50}
+      />
+
+      <div className="container-page relative py-20">
         {/* Top row — brand + pitch */}
         <div className="grid gap-12 lg:grid-cols-[1.2fr_2fr] lg:items-start">
           <div>
             <Link
               href="/"
               aria-label="CGR International"
-              className="inline-flex items-center gap-3"
+              className="group inline-flex items-center gap-3"
             >
               <span
                 aria-hidden
-                className="grid h-10 w-10 place-items-center rounded-sm border border-steel-300/40 font-mono text-xs font-bold tracking-tighter"
+                className="relative grid h-10 w-14 place-items-center"
               >
-                CGR
+                <span className="relative z-10 font-display text-[17px] font-extrabold tracking-tight text-white">
+                  CGR
+                </span>
+                <BrandSwoosh
+                  className="pointer-events-none absolute inset-0 h-full w-full"
+                  strokeWidth={8}
+                  opacity={1}
+                />
               </span>
-              <span className="font-mono text-[10px] uppercase tracking-widest text-steel-400">
+              <span className="font-mono text-[10px] uppercase tracking-widest text-white/60">
                 International · Est. 1902
               </span>
             </Link>
-            <p className="mt-6 max-w-sm text-sm text-steel-400 text-pretty">
+            <p className="mt-6 max-w-sm font-display text-2xl font-semibold italic leading-tight text-white">
+              Form your world.
+            </p>
+            <p className="mt-4 max-w-sm text-sm text-white/70 text-pretty">
               Leader mondial de l'ingénierie des ressorts, du formage à froid
               et des composants mécaniques de précision.
             </p>
-            <div className="mt-6 flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-steel-400">
-              <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-ignition" />
+            <div className="mt-6 flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-white/60">
+              <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-accent" />
               15 sites · 4 continents · 3 200 collaborateurs
             </div>
           </div>
@@ -90,7 +108,7 @@ export default function Footer() {
           >
             {columns.map((col) => (
               <div key={col.title}>
-                <p className="font-mono text-[10px] uppercase tracking-widest text-steel-400">
+                <p className="font-mono text-[10px] uppercase tracking-widest text-white/50">
                   — {col.title}
                 </p>
                 <ul className="mt-5 space-y-3">
@@ -106,20 +124,20 @@ export default function Footer() {
         </div>
 
         {/* Certifications strip */}
-        <div className="mt-16 border-t border-[color:var(--line)] pt-10">
-          <p className="font-mono text-[10px] uppercase tracking-widest text-steel-400">
+        <div className="mt-16 border-t border-white/10 pt-10">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-white/50">
             — Certifications & référentiels
           </p>
-          <ul className="mt-6 grid grid-cols-2 gap-px bg-[color:var(--line)] sm:grid-cols-3 lg:grid-cols-6">
+          <ul className="mt-6 grid grid-cols-2 gap-px bg-white/10 sm:grid-cols-3 lg:grid-cols-6">
             {certifications.map((c) => (
               <li
                 key={c.id}
-                className="group flex flex-col gap-1 bg-[#050507] p-4 transition-colors hover:bg-carbon-950"
+                className="group flex flex-col gap-1 bg-brand p-4 transition-colors hover:bg-brand-800"
               >
-                <span className="font-mono text-sm text-steel-100 transition-colors group-hover:text-ignition">
+                <span className="font-mono text-sm text-white transition-colors group-hover:text-accent">
                   {c.id}
                 </span>
-                <span className="font-mono text-[10px] uppercase tracking-widest text-steel-400">
+                <span className="font-mono text-[10px] uppercase tracking-widest text-white/50">
                   {c.label}
                 </span>
               </li>
@@ -128,7 +146,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-16 flex flex-col gap-6 border-t border-[color:var(--line)] pt-8 font-mono text-[10px] uppercase tracking-widest text-steel-400 md:flex-row md:items-center md:justify-between">
+        <div className="mt-16 flex flex-col gap-6 border-t border-white/10 pt-8 font-mono text-[10px] uppercase tracking-widest text-white/50 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
             <span>© {year} CGR International · Tous droits réservés.</span>
             {legal.map((l) => (
@@ -138,8 +156,8 @@ export default function Footer() {
             ))}
           </div>
           <div className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-ignition" />
-            <span>Kinetic Precision · Build v0.4</span>
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            <span>Form your world. · Build v0.5</span>
           </div>
         </div>
       </div>
@@ -148,7 +166,7 @@ export default function Footer() {
 }
 
 // ──────────────────────────────────────────────────────────────
-// Animated ignition-orange underline on hover (pure CSS, no JS)
+// Animated magenta underline on hover (pure CSS, no JS)
 // ──────────────────────────────────────────────────────────────
 function FooterLink({
   href,
@@ -162,17 +180,17 @@ function FooterLink({
   return (
     <Link
       href={href}
-      className={`group relative inline-flex items-center transition-colors hover:text-ignition ${
+      className={`group relative inline-flex items-center transition-colors hover:text-accent ${
         subtle
-          ? "font-mono text-[10px] uppercase tracking-widest text-steel-400"
-          : "font-mono text-sm text-steel-200"
+          ? "font-mono text-[10px] uppercase tracking-widest text-white/50"
+          : "font-mono text-sm text-white/85"
       }`}
     >
       <span className="relative">
         {children}
         <span
           aria-hidden
-          className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-ignition transition-transform duration-300 ease-out group-hover:scale-x-100"
+          className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-accent transition-transform duration-300 ease-out group-hover:scale-x-100"
         />
       </span>
     </Link>

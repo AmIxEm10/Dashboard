@@ -1,5 +1,9 @@
-import type { Metadata } from "next";
-import { Bricolage_Grotesque, JetBrains_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import {
+  Plus_Jakarta_Sans,
+  Inter,
+  JetBrains_Mono,
+} from "next/font/google";
 import "./globals.css";
 import LenisProvider from "@/components/providers/LenisProvider";
 import SceneCanvas from "@/components/three/SceneCanvas";
@@ -7,10 +11,18 @@ import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import Preloader from "@/components/ui/Preloader";
 
-const display = Bricolage_Grotesque({
+const display = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-display",
   display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+const body = Inter({
+  subsets: ["latin"],
+  variable: "--font-body",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 const mono = JetBrains_Mono({
@@ -20,15 +32,15 @@ const mono = JetBrains_Mono({
 });
 
 const SITE_URL = "https://www.cgr-international.com";
-const OG_IMAGE = "/og/cgr-kinetic-precision.jpg";
+const OG_IMAGE = "/og/cgr-form-your-world.jpg";
 const OG_DESCRIPTION =
-  "Leader mondial de l'ingénierie des ressorts, du formage à froid et des composants mécaniques de précision pour les industries automobile, aéronautique et médicale. 15 sites, 4 continents, certifié IATF 16949 · EN 9100 · ISO 9001.";
+  "CGR International — Form your world. Leader mondial de l'ingénierie des ressorts, du formage à froid et des composants mécaniques de précision. 15 sites, 4 continents. IATF 16949 · EN 9100 · ISO 13485 · ISO 9001.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default:
-      "CGR International | Leader en ingénierie des ressorts et formage à froid",
+      "CGR International | Form your world. — Ressorts & formage à froid",
     template: "%s · CGR International",
   },
   description: OG_DESCRIPTION,
@@ -36,12 +48,12 @@ export const metadata: Metadata = {
   generator: "Next.js",
   keywords: [
     "CGR International",
+    "Form your world",
     "ressorts industriels",
     "spring manufacturer",
     "formage à froid",
     "cold forming",
     "composants mécaniques de précision",
-    "precision mechanical components",
     "pièces automobiles",
     "IATF 16949",
     "aéronautique",
@@ -68,8 +80,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "CGR International",
-    title:
-      "CGR International | Leader en ingénierie des ressorts et formage à froid",
+    title: "CGR International | Form your world.",
     description: OG_DESCRIPTION,
     url: SITE_URL,
     locale: "fr_FR",
@@ -79,15 +90,14 @@ export const metadata: Metadata = {
         url: OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "CGR International — Precision, Tension, Kinetic Energy",
+        alt: "CGR International — Form your world.",
         type: "image/jpeg",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title:
-      "CGR International | Leader en ingénierie des ressorts et formage à froid",
+    title: "CGR International | Form your world.",
     description: OG_DESCRIPTION,
     images: [OG_IMAGE],
   },
@@ -115,13 +125,23 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#0b2250",
+  colorScheme: "light",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" className={`${display.variable} ${mono.variable}`}>
+    <html
+      lang="fr"
+      className={`${display.variable} ${body.variable} ${mono.variable}`}
+    >
       <body>
         <LenisProvider>
           {/* Global WebGL canvas stays mounted across route changes. */}

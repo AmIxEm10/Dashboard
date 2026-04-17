@@ -98,22 +98,22 @@ export default function Spring3D({
     <group ref={group}>
       <mesh ref={mesh} geometry={geometry} castShadow receiveShadow>
         <meshStandardMaterial
-          color="#c8ced6"
-          metalness={0.95}
-          roughness={0.18}
-          emissive="#ff4d1f"
-          emissiveIntensity={0.15}
+          color="#0b2250"
+          metalness={0.92}
+          roughness={0.22}
+          emissive="#e6007e"
+          emissiveIntensity={0.18}
         />
       </mesh>
 
       {/* Anchor plates at each end — adds scale and industrial feel */}
       <mesh position={[0, height / 2 + 0.04, 0]}>
         <cylinderGeometry args={[radius + 0.18, radius + 0.18, 0.06, 48]} />
-        <meshStandardMaterial color="#1a1d24" metalness={0.9} roughness={0.3} />
+        <meshStandardMaterial color="#061433" metalness={0.9} roughness={0.3} />
       </mesh>
       <mesh position={[0, -height / 2 - 0.04, 0]}>
         <cylinderGeometry args={[radius + 0.18, radius + 0.18, 0.06, 48]} />
-        <meshStandardMaterial color="#1a1d24" metalness={0.9} roughness={0.3} />
+        <meshStandardMaterial color="#061433" metalness={0.9} roughness={0.3} />
       </mesh>
     </group>
   );

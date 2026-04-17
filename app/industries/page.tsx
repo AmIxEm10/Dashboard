@@ -28,9 +28,9 @@ export default function IndustriesPage() {
       {/* Intro — keeps the hero/page header breathable before pinning */}
       <section className="relative z-10 flex min-h-[70vh] items-end pt-32 pb-16 sm:pt-36">
         <div className="container-page relative">
-          <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest text-steel-400">
+          <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest text-ink-500">
             <span className="chip">
-              <span className="h-1.5 w-1.5 rounded-full bg-ignition" />
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
               CGR.02 · Industries
             </span>
             <span>— 3 filières, un même atelier</span>
@@ -38,12 +38,10 @@ export default function IndustriesPage() {
 
           <h1 className="display mt-10 text-[clamp(3rem,9vw,9rem)] text-balance">
             Là où la matière{" "}
-            <span className="italic text-ignition">
-              devient fonction.
-            </span>
+            <span className="italic text-accent">devient fonction.</span>
           </h1>
 
-          <p className="mt-8 max-w-2xl text-lg text-steel-300 text-pretty">
+          <p className="mt-8 max-w-2xl text-lg text-ink-500 text-pretty">
             Faites défiler la page — les particules métalliques en suspension
             vont se rassembler, spire après spire, pour former les pièces
             critiques des trois industries que nous servons.
@@ -56,13 +54,13 @@ export default function IndustriesPage() {
       <IndustriesScroller />
 
       {/* Outro — releases the pin, resets the scene on hero */}
-      <section className="relative z-10 border-t border-[color:var(--line)] bg-carbon-950/80 py-32 backdrop-blur-sm">
+      <section className="relative z-10 border-t border-[color:var(--line)] bg-paper-soft py-32">
         <div className="container-page grid gap-10 lg:grid-cols-[1fr_2fr] lg:items-end">
           <p className="eyebrow">— Et ensuite</p>
           <div>
             <h2 className="display text-4xl text-balance sm:text-5xl lg:text-6xl">
               D'autres secteurs&nbsp;? Énergie, ferroviaire, luxe, défense —{" "}
-              <span className="italic text-ignition">
+              <span className="italic text-accent">
                 même exigence, mêmes équipes.
               </span>
             </h2>

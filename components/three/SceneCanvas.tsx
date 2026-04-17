@@ -86,18 +86,18 @@ export default function SceneCanvas() {
         camera={{ position: [0, 0, 5.2], fov: 38 }}
       >
         <Suspense fallback={null}>
-          <ambientLight intensity={0.35} />
+          <ambientLight intensity={0.55} />
           <directionalLight
             position={[4, 6, 3]}
-            intensity={1.2}
+            intensity={1.1}
             color="#ffffff"
           />
           <directionalLight
             position={[-5, -2, -2]}
-            intensity={0.4}
-            color="#ff4d1f"
+            intensity={0.45}
+            color="#e6007e"
           />
-          <pointLight position={[0, 0, 3]} intensity={0.6} color="#ff7040" />
+          <pointLight position={[0, 0, 3]} intensity={0.7} color="#f65aa7" />
 
           {mode === "hero" && <Spring3D />}
           {mode === "forge" && <ParticleForge count={particleCount} />}

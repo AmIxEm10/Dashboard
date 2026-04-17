@@ -19,25 +19,25 @@ export default function InnovationViewer() {
     <div
       onPointerEnter={() => setHovering(true)}
       onPointerLeave={() => setHovering(false)}
-      className="relative aspect-square w-full overflow-hidden rounded-sm border border-[color:var(--line-strong)] bg-gradient-to-br from-carbon-950 via-[#0a0b10] to-carbon-950"
+      className="relative aspect-square w-full overflow-hidden rounded-sm border border-[color:var(--line-strong)] bg-gradient-to-br from-paper-soft via-paper to-paper-elev shadow-brand-lg"
     >
       {/* Cursor hint */}
       <div
-        className={`pointer-events-none absolute left-4 top-4 z-10 flex items-center gap-2 rounded-full border border-[color:var(--line-strong)] bg-carbon-950/80 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest backdrop-blur transition-opacity ${
+        className={`pointer-events-none absolute left-4 top-4 z-10 flex items-center gap-2 rounded-full border border-[color:var(--line-strong)] bg-paper/90 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-ink-500 backdrop-blur transition-opacity ${
           hovering ? "opacity-40" : "opacity-100"
         }`}
       >
-        <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-ignition" />
+        <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-accent" />
         Drag to inspect
       </div>
 
       {/* Scan-line gradient overlay */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-10 mix-blend-soft-light"
+        className="pointer-events-none absolute inset-0 z-10 mix-blend-multiply"
         style={{
           background:
-            "repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 3px)",
+            "repeating-linear-gradient(0deg, rgba(11,34,80,0.025) 0px, rgba(11,34,80,0.025) 1px, transparent 1px, transparent 3px)",
         }}
       />
       {/* Corner markers */}
@@ -49,7 +49,7 @@ export default function InnovationViewer() {
       ].map((c) => (
         <span
           key={c}
-          className={`pointer-events-none absolute z-10 h-3 w-3 border-ignition/70 ${c}`}
+          className={`pointer-events-none absolute z-10 h-3 w-3 border-accent/70 ${c}`}
         />
       ))}
 
@@ -59,29 +59,30 @@ export default function InnovationViewer() {
         camera={{ position: [3.2, 1.4, 4.6], fov: 38 }}
       >
         <Suspense fallback={null}>
-          <ambientLight intensity={0.4} />
+          <ambientLight intensity={0.6} />
           <directionalLight
             position={[4, 5, 3]}
-            intensity={1.3}
+            intensity={1.4}
             color="#ffffff"
           />
           <directionalLight
             position={[-4, -2, -3]}
             intensity={0.5}
-            color="#ff4d1f"
+            color="#e6007e"
           />
-          <pointLight position={[0, 0, 2]} intensity={0.8} color="#ff7040" />
+          <pointLight position={[0, 0, 2]} intensity={0.8} color="#f65aa7" />
 
           <MetalHelix />
 
           <ContactShadows
             position={[0, -1.75, 0]}
-            opacity={0.6}
+            opacity={0.25}
             scale={6}
             blur={2.4}
             far={4}
+            color="#0b2250"
           />
-          <Environment preset="warehouse" />
+          <Environment preset="city" />
 
           <OrbitControls
             enableDamping
@@ -97,8 +98,8 @@ export default function InnovationViewer() {
           <EffectComposer multisampling={0}>
             <Bloom
               mipmapBlur
-              intensity={1.4}
-              luminanceThreshold={0.6}
+              intensity={1.6}
+              luminanceThreshold={0.55}
               luminanceSmoothing={0.25}
               radius={0.7}
             />

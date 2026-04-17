@@ -48,10 +48,10 @@ export default function InnovationPage() {
         <div className="container-page">
           <div className="flex items-center gap-3">
             <span className="chip">
-              <span className="h-1.5 w-1.5 rounded-full bg-ignition" />
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
               CGR.03 · Innovation
             </span>
-            <span className="font-mono text-[10px] uppercase tracking-widest text-steel-400">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-ink-500">
               — Cliquez. Tournez. Inspectez.
             </span>
           </div>
@@ -60,13 +60,13 @@ export default function InnovationPage() {
             <div>
               <h1 className="display text-[clamp(2.75rem,7vw,6.5rem)] text-balance">
                 La matière{" "}
-                <span className="italic text-ignition">
+                <span className="italic text-accent">
                   se laisse manipuler.
                 </span>
               </h1>
-              <p className="mt-8 max-w-xl text-lg text-steel-300 text-pretty">
+              <p className="mt-8 max-w-xl text-lg text-ink-500 text-pretty">
                 Ce n'est pas une image. C'est un vrai objet en 3D — double
-                hélice acier, cœur orange en ignition — tenue par le moteur
+                hélice navy, cœur magenta incandescent — tenue par le moteur
                 physique de votre navigateur. Tournez-le à la souris.
               </p>
               <div className="mt-10 grid grid-cols-3 gap-6 border-t border-[color:var(--line)] pt-8 max-w-md">
@@ -76,8 +76,8 @@ export default function InnovationPage() {
                   ["4h", "cycle proto"],
                 ].map(([n, l]) => (
                   <div key={l}>
-                    <div className="font-mono text-2xl text-ignition">{n}</div>
-                    <div className="mt-1 text-xs uppercase tracking-widest text-steel-400">
+                    <div className="font-mono text-2xl text-accent">{n}</div>
+                    <div className="mt-1 text-xs uppercase tracking-widest text-ink-500">
                       {l}
                     </div>
                   </div>
@@ -89,7 +89,7 @@ export default function InnovationPage() {
                 capture pointer events without fighting page scroll. */}
             <div className="relative">
               <InnovationViewer />
-              <div className="mt-4 flex items-center justify-between font-mono text-[10px] uppercase tracking-widest text-steel-400">
+              <div className="mt-4 flex items-center justify-between font-mono text-[10px] uppercase tracking-widest text-ink-500">
                 <span>● Manipulable · drag to rotate · scroll to zoom</span>
                 <span>CGR.HELIX.04</span>
               </div>
@@ -99,23 +99,23 @@ export default function InnovationPage() {
       </section>
 
       {/* Pillars — editorial grid, heavy hairlines */}
-      <section className="relative z-10 mt-32 border-y border-[color:var(--line)] bg-carbon-950/60 py-24 backdrop-blur-sm">
+      <section className="relative z-10 mt-32 border-y border-[color:var(--line)] bg-paper-soft py-24">
         <div className="container-page">
           <p className="eyebrow">— Trois piliers, une seule exigence</p>
-          <div className="mt-12 grid gap-px bg-[color:var(--line)] lg:grid-cols-3">
+          <div className="mt-12 grid gap-px bg-paper-line lg:grid-cols-3">
             {pillars.map((p) => (
               <article
                 key={p.tag}
-                className="group bg-[color:var(--bg)] p-8 transition-colors hover:bg-carbon-950/80"
+                className="group bg-paper p-8 transition-colors hover:bg-paper-elev"
               >
-                <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-widest text-steel-400">
+                <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-widest text-ink-500">
                   <span>{p.tag}</span>
-                  <span className="h-1.5 w-1.5 rounded-full bg-ignition transition-transform group-hover:scale-150" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent transition-transform group-hover:scale-150" />
                 </div>
                 <h3 className="display mt-10 text-3xl text-balance">
                   {p.title}
                 </h3>
-                <p className="mt-6 text-sm text-steel-300 text-pretty">
+                <p className="mt-6 text-sm text-ink-500 text-pretty">
                   {p.body}
                 </p>
               </article>
@@ -131,7 +131,7 @@ export default function InnovationPage() {
           <div>
             <h2 className="display text-4xl text-balance sm:text-5xl lg:text-6xl">
               Envoyez-nous un cahier des charges —{" "}
-              <span className="italic text-ignition">
+              <span className="italic text-accent">
                 on vous répond sous 48h.
               </span>
             </h2>

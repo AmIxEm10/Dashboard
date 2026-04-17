@@ -26,9 +26,11 @@ import { motion } from "@/lib/motion-store";
 
 const DEFAULT_COUNT = 2400;
 
-const IGNITION = new THREE.Color("#ff4d1f");
-const STEEL = new THREE.Color("#b4bac4");
-const CARBON = new THREE.Color("#1a1d24");
+// Brand-aligned colors for the GPU heat ramp.
+// Cold = navy (CGR wordmark), hot = magenta (brand swoosh).
+const ACCENT = new THREE.Color("#e6007e"); // magenta · hot end
+const BRAND = new THREE.Color("#1c44a0"); // navy steel · cold end
+const DEEP = new THREE.Color("#061433"); // deep navy · shadow core
 
 // ── Deterministic PRNG (mulberry32) — stable identity across reloads
 function mulberry32(seed: number) {
@@ -302,9 +304,9 @@ export default function ParticleForge({ count = DEFAULT_COUNT }: Props) {
       uIndustry:    { value: 0 },
       uMorphSpeed:  { value: 0 },
       uTime:        { value: 0 },
-      uColorCold:   { value: STEEL },
-      uColorCarbon: { value: CARBON },
-      uColorHot:    { value: IGNITION },
+      uColorCold:   { value: BRAND },
+      uColorCarbon: { value: DEEP },
+      uColorHot:    { value: ACCENT },
     };
 
     return { geometry: geo, uniforms };
