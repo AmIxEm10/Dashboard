@@ -14,6 +14,7 @@ import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { Vector2 } from "three";
 import { motion } from "@/lib/motion-store";
+import { useIsMobile } from "@/lib/useIsMobile";
 import Spring3D from "./Spring3D";
 import ParticleForge from "./ParticleForge";
 
@@ -55,6 +56,7 @@ type SceneMode = "hero" | "forge" | "blank";
  */
 export default function SceneCanvas() {
   const pathname = usePathname();
+  const isMobile = useIsMobile(768);
 
   const mode: SceneMode = useMemo(() => {
     if (pathname?.startsWith("/industries")) return "forge";
@@ -63,17 +65,23 @@ export default function SceneCanvas() {
     return "hero";
   }, [pathname]);
 
+  // Mobile budget: single-pixel DPR, lighter bloom, no chromatic
+  // aberration or vignette. Keeps the scene recognizable while
+  // trimming ~40% of fragment-shader cost on a typical handset.
+  const dpr: [number, number] = isMobile ? [1, 1] : [1, 1.5];
+  const particleCount = isMobile ? 800 : 2400;
+
   return (
     <div
       className="pointer-events-none fixed inset-0 z-0"
       style={{ opacity: mode === "blank" ? 0 : 1, transition: "opacity 0.6s" }}
     >
       <Canvas
-        dpr={[1, 1.5]}
+        dpr={dpr}
         gl={{
-          antialias: true,
+          antialias: !isMobile,
           alpha: true,
-          powerPreference: "high-performance",
+          powerPreference: isMobile ? "low-power" : "high-performance",
         }}
         camera={{ position: [0, 0, 5.2], fov: 38 }}
       >
@@ -92,11 +100,11 @@ export default function SceneCanvas() {
           <pointLight position={[0, 0, 3]} intensity={0.6} color="#ff7040" />
 
           {mode === "hero" && <Spring3D />}
-          {mode === "forge" && <ParticleForge />}
+          {mode === "forge" && <ParticleForge count={particleCount} />}
 
           <Environment preset="warehouse" />
 
-          {mode === "hero" && (
+          {mode === "hero" && !isMobile && (
             <ContactShadows
               position={[0, -1.8, 0]}
               opacity={0.55}
@@ -106,20 +114,32 @@ export default function SceneCanvas() {
             />
           )}
 
-          {/* Post-processing applies to both hero and forge scenes.
-              Bloom threshold = 0.85 → only the hot-metal particles
-              (which output color > 1.0 in the fragment shader) glow. */}
-          <EffectComposer multisampling={0} disableNormalPass>
-            <Bloom
-              mipmapBlur
-              intensity={1.2}
-              luminanceThreshold={0.85}
-              luminanceSmoothing={0.2}
-              radius={0.75}
-            />
-            <KineticAberration />
-            <Vignette eskil={false} offset={0.2} darkness={0.6} />
-          </EffectComposer>
+          {/* Post-processing — full stack on desktop, a trimmed Bloom
+              only on mobile (no chromatic pass, no vignette, no
+              mipmap blur) so the hot particles still glow without
+              blowing the fragment-shader budget of a phone. */}
+          {isMobile ? (
+            <EffectComposer multisampling={0} disableNormalPass>
+              <Bloom
+                intensity={0.7}
+                luminanceThreshold={0.9}
+                luminanceSmoothing={0.25}
+                radius={0.5}
+              />
+            </EffectComposer>
+          ) : (
+            <EffectComposer multisampling={0} disableNormalPass>
+              <Bloom
+                mipmapBlur
+                intensity={1.2}
+                luminanceThreshold={0.85}
+                luminanceSmoothing={0.2}
+                radius={0.75}
+              />
+              <KineticAberration />
+              <Vignette eskil={false} offset={0.2} darkness={0.6} />
+            </EffectComposer>
+          )}
         </Suspense>
       </Canvas>
     </div>

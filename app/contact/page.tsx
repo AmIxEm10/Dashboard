@@ -2,9 +2,23 @@ import type { Metadata } from "next";
 import KineticForm from "@/components/ui/KineticForm";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: "Contact — Ouvrez un projet industriel",
   description:
-    "Ouvrez un projet avec CGR International — réponse technique sous 48h.",
+    "Contactez les équipes projet CGR International pour un cahier des charges industriel. Première analyse technique chiffrée sous 48h. 15 sites, 4 continents.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Contact CGR International — Réponse projet sous 48h",
+    description:
+      "Envoyez votre cahier des charges — nos équipes projet reviennent vers vous sous 48h avec une première analyse technique chiffrée.",
+    url: "/contact",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact CGR International — Réponse projet sous 48h",
+    description:
+      "Cahier des charges industriel ? Réponse technique chiffrée sous 48h par l'équipe projets CGR International.",
+  },
 };
 
 const sites = [
@@ -102,10 +116,6 @@ export default function ContactPage() {
               </div>
             </div>
           </aside>
-        </div>
-
-        <div className="mt-24 border-t border-[color:var(--line)] py-10 font-mono text-[10px] uppercase tracking-widest text-steel-400">
-          © CGR International · Est. 1902 · Tous droits réservés.
         </div>
       </div>
     </section>

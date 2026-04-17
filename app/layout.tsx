@@ -4,6 +4,7 @@ import "./globals.css";
 import LenisProvider from "@/components/providers/LenisProvider";
 import SceneCanvas from "@/components/three/SceneCanvas";
 import Navbar from "@/components/ui/Navbar";
+import Footer from "@/components/ui/Footer";
 import Preloader from "@/components/ui/Preloader";
 
 const display = Bricolage_Grotesque({
@@ -18,22 +19,100 @@ const mono = Geist_Mono({
   display: "swap",
 });
 
+const SITE_URL = "https://www.cgr-international.com";
+const OG_IMAGE = "/og/cgr-kinetic-precision.jpg";
+const OG_DESCRIPTION =
+  "Leader mondial de l'ingénierie des ressorts, du formage à froid et des composants mécaniques de précision pour les industries automobile, aéronautique et médicale. 15 sites, 4 continents, certifié IATF 16949 · EN 9100 · ISO 9001.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "CGR International — Precision Engineering",
+    default:
+      "CGR International | Leader en ingénierie des ressorts et formage à froid",
     template: "%s · CGR International",
   },
-  description:
-    "CGR International — leader mondial de l'ingénierie, de la fabrication de ressorts, du formage à froid et des composants mécaniques de précision.",
+  description: OG_DESCRIPTION,
+  applicationName: "CGR International",
+  generator: "Next.js",
   keywords: [
     "CGR International",
-    "ressorts",
+    "ressorts industriels",
+    "spring manufacturer",
     "formage à froid",
-    "composants mécaniques",
-    "automobile",
+    "cold forming",
+    "composants mécaniques de précision",
+    "precision mechanical components",
+    "pièces automobiles",
+    "IATF 16949",
     "aéronautique",
-    "précision",
+    "EN 9100",
+    "médical",
+    "ISO 13485",
+    "ISO 9001",
+    "ISO 14001",
+    "B2B industriel",
+    "fabricant de ressorts",
+    "usinage précision",
   ],
+  authors: [{ name: "CGR International", url: SITE_URL }],
+  creator: "CGR International",
+  publisher: "CGR International",
+  category: "manufacturing",
+  alternates: {
+    canonical: "/",
+    languages: {
+      "fr-FR": "/",
+      "en-US": "/en",
+    },
+  },
+  openGraph: {
+    type: "website",
+    siteName: "CGR International",
+    title:
+      "CGR International | Leader en ingénierie des ressorts et formage à froid",
+    description: OG_DESCRIPTION,
+    url: SITE_URL,
+    locale: "fr_FR",
+    alternateLocale: ["en_US"],
+    images: [
+      {
+        url: OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: "CGR International — Precision, Tension, Kinetic Energy",
+        type: "image/jpeg",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title:
+      "CGR International | Leader en ingénierie des ressorts et formage à froid",
+    description: OG_DESCRIPTION,
+    images: [OG_IMAGE],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
 };
 
 export default function RootLayout({
@@ -49,6 +128,7 @@ export default function RootLayout({
           <SceneCanvas />
           <Navbar />
           <main className="relative z-10">{children}</main>
+          <Footer />
           {/* Mechanical shutter preloader — sits above everything until
               the loading manager reports ready + min dwell has elapsed. */}
           <Preloader />

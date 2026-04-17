@@ -24,7 +24,7 @@ import { motion } from "@/lib/motion-store";
  * the GPU's thousands of parallel lanes.
  */
 
-const COUNT = 2400;
+const DEFAULT_COUNT = 2400;
 
 const IGNITION = new THREE.Color("#ff4d1f");
 const STEEL = new THREE.Color("#b4bac4");
@@ -246,16 +246,25 @@ void main() {
 }
 `;
 
-export default function ParticleForge() {
+type Props = {
+  /**
+   * Particle count. Downstream (SceneCanvas) passes a reduced value on
+   * mobile — the geometry rebuilds only when this changes, never per
+   * frame, so there is zero cost to switching budgets.
+   */
+  count?: number;
+};
+
+export default function ParticleForge({ count = DEFAULT_COUNT }: Props) {
   const material = useRef<THREE.ShaderMaterial>(null);
   const prevIndustry = useRef(0);
 
-  // ── Targets + random offsets — baked once
+  // ── Targets + random offsets — baked once per `count` change
   const { geometry, uniforms } = useMemo(() => {
-    const targets = buildTargets(COUNT);
-    const offsets = new Float32Array(COUNT);
+    const targets = buildTargets(count);
+    const offsets = new Float32Array(count);
     const orand = mulberry32(1337);
-    for (let i = 0; i < COUNT; i++) offsets[i] = orand() * 100;
+    for (let i = 0; i < count; i++) offsets[i] = orand() * 100;
 
     // Base cylinder (shared across all instances)
     const base = new THREE.CylinderGeometry(0.5, 0.5, 2.2, 8);
@@ -285,7 +294,7 @@ export default function ParticleForge() {
       "iOffset",
       new THREE.InstancedBufferAttribute(offsets, 1),
     );
-    geo.instanceCount = COUNT;
+    geo.instanceCount = count;
     // Large bounding sphere so the mesh never gets frustum-culled
     geo.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 8);
 
@@ -299,7 +308,7 @@ export default function ParticleForge() {
     };
 
     return { geometry: geo, uniforms };
-  }, []);
+  }, [count]);
 
   useFrame((state, delta) => {
     const mat = material.current;

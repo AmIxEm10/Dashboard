@@ -3,9 +3,23 @@ import Link from "next/link";
 import IndustriesScroller from "@/components/ui/IndustriesScroller";
 
 export const metadata: Metadata = {
-  title: "Industries",
+  title: "Industries — Automobile, Aéronautique, Médical",
   description:
-    "Automobile, aéronautique, médical : trois secteurs où la précision de CGR International fait la différence.",
+    "CGR International livre des ressorts et pièces mécaniques de précision pour l'automobile (IATF 16949), l'aéronautique (EN 9100) et le médical (ISO 13485). Découvrez nos trois filières.",
+  alternates: { canonical: "/industries" },
+  openGraph: {
+    title: "Industries CGR — Automobile, Aéronautique, Médical",
+    description:
+      "Trois filières critiques, un même atelier : ressorts et composants mécaniques de précision certifiés IATF 16949, EN 9100, ISO 13485.",
+    url: "/industries",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Industries CGR — Automobile, Aéronautique, Médical",
+    description:
+      "Ressorts et composants de précision pour l'automobile, l'aéronautique et le médical — certifications IATF 16949, EN 9100, ISO 13485.",
+  },
 };
 
 export default function IndustriesPage() {

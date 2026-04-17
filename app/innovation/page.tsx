@@ -3,9 +3,23 @@ import Link from "next/link";
 import InnovationViewer from "@/components/ui/InnovationViewer";
 
 export const metadata: Metadata = {
-  title: "Innovation",
+  title: "Innovation — R&D, prototypage rapide, matériaux avancés",
   description:
-    "R&D, prototypage rapide, matériaux avancés — l'atelier d'innovation CGR International.",
+    "Laboratoires R&D, simulation FEM, prototypage en moins de 4h : CGR International transforme un cahier des charges en pièce série. 84 brevets déposés, 12 labos actifs.",
+  alternates: { canonical: "/innovation" },
+  openGraph: {
+    title: "Innovation CGR — R&D, prototypage rapide, matériaux avancés",
+    description:
+      "R&D, simulation FEM et prototypage rapide en moins de 4h. Découvrez l'atelier d'innovation CGR International en 3D manipulable.",
+    url: "/innovation",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Innovation CGR — R&D, prototypage rapide, matériaux avancés",
+    description:
+      "Atelier R&D et prototypage CGR International : 84 brevets, 12 labos, cycle proto < 4h.",
+  },
 };
 
 const pillars = [
