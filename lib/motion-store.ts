@@ -14,6 +14,8 @@ type MotionState = {
   mouseY: number; // normalized -1 → 1
   scrollProgress: number; // 0 → 1 across the hero
   scrollY: number; // raw pixel offset
+  /** Absolute scroll speed in px/s, smoothed. Drives chromatic aberration. */
+  scrollVelocity: number;
   pointerActive: boolean;
   /**
    * Fractional industry index — ParticleForge lerps between
@@ -28,6 +30,7 @@ export const motion: MotionState = {
   mouseY: 0,
   scrollProgress: 0,
   scrollY: 0,
+  scrollVelocity: 0,
   pointerActive: false,
   industryFloat: 0,
 };

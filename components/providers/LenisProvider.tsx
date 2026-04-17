@@ -30,12 +30,21 @@ export default function LenisProvider({
       touchMultiplier: 1.2,
     });
 
-    const onScroll = ({ scroll }: { scroll: number }) => {
+    const onScroll = ({
+      scroll,
+      velocity,
+    }: {
+      scroll: number;
+      velocity: number;
+    }) => {
       motion.scrollY = scroll;
       motion.scrollProgress = Math.min(
         1,
         Math.max(0, scroll / window.innerHeight),
       );
+      // Lenis velocity is in px/ms-ish; square-root keeps the dynamic
+      // range usable for visual effects without clipping on fast flings.
+      motion.scrollVelocity = Math.min(1, Math.abs(velocity) * 0.02);
       ScrollTrigger.update();
     };
     lenis.on("scroll", onScroll);

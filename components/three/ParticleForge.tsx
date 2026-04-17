@@ -1,34 +1,36 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { motion } from "@/lib/motion-store";
 
 /**
- * ParticleForge
- * -------------
- * A single InstancedMesh of COUNT metallic wire-cylinders that morph
- * between pre-computed target shapes (chaos → automobile → airfoil →
- * double helix) based on `motion.industryFloat` (fractional index).
+ * ParticleForge — GPU edition.
  *
- * Perf contract:
- *  - One draw call for the whole cloud (InstancedMesh).
- *  - Zero React state per frame — we read `motion.industryFloat` from
- *    the shared motion store (plain object).
- *  - Zero allocations in the hot loop: one shared Object3D dummy, one
- *    Float32Array for current positions. Damping lerp factor is
- *    pre-computed once per frame outside the per-instance loop.
- *  - Target positions are baked once in useMemo via deterministic PRNG
- *    so particle "identity" is stable across HMR reloads.
+ * The four target shapes (chaos / auto / aero / médical) are uploaded
+ * once as InstancedBufferAttributes. The morphing, noise, rotation
+ * and heat coloring all happen on the GPU via a ShaderMaterial.
+ *
+ * CPU work per frame: update 3 uniforms (industryFloat, morphSpeed,
+ * time). That's it. The vertex shader does per-instance lerp between
+ * two targets, adds organic noise, applies a per-particle rotation,
+ * and forwards a "heat" value to the fragment shader. The fragment
+ * shader mixes steel → ignition orange based on heat and boosts
+ * brightness past 1.0 so the Bloom post-pass picks up the hot metal.
+ *
+ * Performance: a single draw call, zero JS allocations per frame,
+ * and the heavy per-particle math moves from the main thread onto
+ * the GPU's thousands of parallel lanes.
  */
 
 const COUNT = 2400;
 
-// ── Shared scratch objects (module-scoped, safe because useFrame is serial)
-const dummy = new THREE.Object3D();
+const IGNITION = new THREE.Color("#ff4d1f");
+const STEEL = new THREE.Color("#b4bac4");
+const CARBON = new THREE.Color("#1a1d24");
 
-// ── Deterministic PRNG so target shapes stay identical across reloads
+// ── Deterministic PRNG (mulberry32) — stable identity across reloads
 function mulberry32(seed: number) {
   let s = seed | 0;
   return () => {
@@ -40,26 +42,15 @@ function mulberry32(seed: number) {
   };
 }
 
-// ── Cheap "noise" — sum of phase-shifted sines. Not real simplex, but
-//    smooth, continuous, and 4× cheaper than a proper noise lib.
-function noise3(x: number, y: number, z: number) {
-  return (
-    Math.sin(x * 1.3 + y * 0.7) * 0.5 +
-    Math.sin(y * 1.1 + z * 1.7) * 0.3 +
-    Math.sin(z * 0.9 + x * 1.5) * 0.2
-  );
-}
-
-// ── Build the four target Float32Arrays (each length COUNT*3)
+// ── Four analytical target shapes (same logic as the CPU version)
 function buildTargets(count: number): Float32Array[] {
   const rand = mulberry32(42);
   const targets: Float32Array[] = [];
 
-  // 0 · CHAOS — uniform sphere cloud, slightly squashed on Y
+  // 0 · chaos sphere
   const chaos = new Float32Array(count * 3);
   for (let i = 0; i < count; i++) {
-    const u = rand();
-    const v = rand();
+    const u = rand(), v = rand();
     const theta = 2 * Math.PI * u;
     const phi = Math.acos(2 * v - 1);
     const r = Math.cbrt(rand()) * 2.6;
@@ -69,9 +60,7 @@ function buildTargets(count: number): Float32Array[] {
   }
   targets.push(chaos);
 
-  // 1 · AUTOMOBILE — abstract car silhouette: stretched stadium body +
-  //    four radial wheel clusters. Reads as a car at a glance, stays
-  //    geometric enough to feel industrial.
+  // 1 · automobile — stretched stadium + 4 wheels
   const auto = new Float32Array(count * 3);
   const bodyCount = Math.floor(count * 0.8);
   for (let i = 0; i < bodyCount; i++) {
@@ -103,12 +92,11 @@ function buildTargets(count: number): Float32Array[] {
   }
   targets.push(auto);
 
-  // 2 · AÉRONAUTIQUE — airfoil wing (NACA-ish thickness distribution,
-  //    tapered at the tip). Particles populate the upper + lower skin.
+  // 2 · aéronautique — NACA airfoil, tapered
   const aero = new Float32Array(count * 3);
   for (let i = 0; i < count; i++) {
-    const u = rand(); // chord position 0..1
-    const span = rand() - 0.5; // -0.5..0.5
+    const u = rand();
+    const span = rand() - 0.5;
     const thick =
       0.75 *
       (0.2969 * Math.sqrt(u) -
@@ -124,14 +112,12 @@ function buildTargets(count: number): Float32Array[] {
   }
   targets.push(aero);
 
-  // 3 · MÉDICAL — double helix (DNA). 2 strands + occasional rungs for
-  //    the familiar ladder silhouette.
+  // 3 · médical — double helix + rungs
   const med = new Float32Array(count * 3);
   const turns = 5;
   for (let i = 0; i < count; i++) {
     const t = rand();
     if (i % 11 === 0) {
-      // rung particle crossing both strands at height y
       const y = (t - 0.5) * 3.8;
       const angle = (y / 3.8) * Math.PI * 2 * turns;
       const k = rand() * 2 - 1;
@@ -151,105 +137,202 @@ function buildTargets(count: number): Float32Array[] {
   return targets;
 }
 
+// ── Vertex shader
+const vertexShader = /* glsl */ `
+precision highp float;
+
+attribute vec3 iChaos;
+attribute vec3 iAuto;
+attribute vec3 iAero;
+attribute vec3 iMed;
+attribute float iOffset;
+
+uniform float uIndustry;   // 0..3
+uniform float uMorphSpeed; // d(industry)/dt, smoothed on CPU
+uniform float uTime;
+
+varying float vHeat;
+varying vec3  vNormal;
+varying vec3  vViewDir;
+
+vec3 pickTarget(int i) {
+  if (i == 0) return iChaos;
+  if (i == 1) return iAuto;
+  if (i == 2) return iAero;
+  return iMed;
+}
+
+void main() {
+  float ind = clamp(uIndustry, 0.0, 3.0);
+  int   lo  = int(floor(ind));
+  int   hi  = min(lo + 1, 3);
+  float frac = ind - float(lo);
+
+  vec3 tLo = pickTarget(lo);
+  vec3 tHi = pickTarget(hi);
+  vec3 target = mix(tLo, tHi, frac);
+
+  // Organic noise — peaks at mid-morph (frac = 0.5), vanishes at rest
+  float mid = 1.0 - abs(frac - 0.5) * 2.0;
+  float noiseAmp = 0.18 * mid;
+  vec3 noise = vec3(
+    sin(target.x * 1.3 + iOffset + uTime * 0.4),
+    sin(target.y * 1.1 + iOffset + uTime * 0.3),
+    sin(target.z * 1.5 + iOffset + uTime * 0.35)
+  ) * noiseAmp;
+  target += noise;
+
+  // Per-particle Y-rotation so each cylinder reads as an oriented wire
+  float angle = uTime * 0.35 + iOffset;
+  float c = cos(angle);
+  float s = sin(angle);
+  mat3 rot = mat3(
+    c,   0.0, s,
+    0.0, 1.0, 0.0,
+    -s,  0.0, c
+  );
+
+  float scale = 0.045 + (sin(uTime * 0.6 + iOffset) * 0.5 + 0.5) * 0.02;
+  vec3 localPos = rot * position * scale;
+  vec3 worldPos = target + localPos;
+
+  gl_Position = projectionMatrix * viewMatrix * vec4(worldPos, 1.0);
+
+  // Per-particle velocity estimate:
+  // targetDelta = how much this instance moves per unit of industry
+  // uMorphSpeed = how fast industry is changing right now
+  // → visible only where the transition actually displaces the particle
+  float targetDelta = length(tHi - tLo);
+  float velocity    = targetDelta * uMorphSpeed;
+
+  // Mid-transition adds a "forming" glow even at low speed
+  vHeat = clamp(velocity * 0.55 + mid * 0.35, 0.0, 1.0);
+
+  vNormal  = normalize(rot * normal);
+  vViewDir = normalize(cameraPosition - worldPos);
+}
+`;
+
+// ── Fragment shader
+const fragmentShader = /* glsl */ `
+precision highp float;
+
+varying float vHeat;
+varying vec3  vNormal;
+varying vec3  vViewDir;
+
+uniform vec3 uColorCold;   // steel
+uniform vec3 uColorCarbon; // near-black shadow
+uniform vec3 uColorHot;    // ignition orange
+
+void main() {
+  // Cheap lighting: fresnel rim + N·V for soft shading
+  float nv   = max(dot(vNormal, vViewDir), 0.0);
+  float fres = pow(1.0 - nv, 2.2);
+
+  // Temperature blend — heat goes steel → orange
+  vec3 base = mix(uColorCold, uColorHot, vHeat);
+
+  // Darker carbon core where the particle faces away from the camera
+  vec3 shaded = mix(uColorCarbon, base, nv * 0.85 + 0.15);
+
+  // Rim highlight
+  vec3 color = shaded + fres * 0.35;
+
+  // Hot particles overshoot 1.0 → Bloom post-pass catches them
+  color += uColorHot * vHeat * vHeat * 1.6;
+
+  gl_FragColor = vec4(color, 1.0);
+}
+`;
+
 export default function ParticleForge() {
-  const mesh = useRef<THREE.InstancedMesh>(null);
+  const material = useRef<THREE.ShaderMaterial>(null);
+  const prevIndustry = useRef(0);
 
-  const targets = useMemo(() => buildTargets(COUNT), []);
-  const currents = useMemo(() => {
-    const arr = new Float32Array(COUNT * 3);
-    arr.set(targets[0]); // start in chaos
-    return arr;
-  }, [targets]);
+  // ── Targets + random offsets — baked once
+  const { geometry, uniforms } = useMemo(() => {
+    const targets = buildTargets(COUNT);
+    const offsets = new Float32Array(COUNT);
+    const orand = mulberry32(1337);
+    for (let i = 0; i < COUNT; i++) offsets[i] = orand() * 100;
 
-  // Per-particle random offsets for organic, desynchronized drift
-  const offsets = useMemo(() => {
-    const rand = mulberry32(1337);
-    const arr = new Float32Array(COUNT);
-    for (let i = 0; i < COUNT; i++) arr[i] = rand() * 100;
-    return arr;
-  }, []);
+    // Base cylinder (shared across all instances)
+    const base = new THREE.CylinderGeometry(0.5, 0.5, 2.2, 8);
 
-  // Mark the matrix buffer as dynamically updated — tells the GPU driver
-  // to optimize for per-frame rewrites.
-  useEffect(() => {
-    if (mesh.current) {
-      mesh.current.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
-    }
+    const geo = new THREE.InstancedBufferGeometry();
+    geo.index = base.index;
+    geo.setAttribute("position", base.attributes.position);
+    geo.setAttribute("normal", base.attributes.normal);
+    geo.setAttribute("uv", base.attributes.uv);
+    geo.setAttribute(
+      "iChaos",
+      new THREE.InstancedBufferAttribute(targets[0], 3),
+    );
+    geo.setAttribute(
+      "iAuto",
+      new THREE.InstancedBufferAttribute(targets[1], 3),
+    );
+    geo.setAttribute(
+      "iAero",
+      new THREE.InstancedBufferAttribute(targets[2], 3),
+    );
+    geo.setAttribute(
+      "iMed",
+      new THREE.InstancedBufferAttribute(targets[3], 3),
+    );
+    geo.setAttribute(
+      "iOffset",
+      new THREE.InstancedBufferAttribute(offsets, 1),
+    );
+    geo.instanceCount = COUNT;
+    // Large bounding sphere so the mesh never gets frustum-culled
+    geo.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 8);
+
+    const uniforms = {
+      uIndustry:    { value: 0 },
+      uMorphSpeed:  { value: 0 },
+      uTime:        { value: 0 },
+      uColorCold:   { value: STEEL },
+      uColorCarbon: { value: CARBON },
+      uColorHot:    { value: IGNITION },
+    };
+
+    return { geometry: geo, uniforms };
   }, []);
 
   useFrame((state, delta) => {
-    const m = mesh.current;
-    if (!m) return;
+    const mat = material.current;
+    if (!mat) return;
 
-    const t = state.clock.elapsedTime;
-    const dt = Math.min(delta, 0.05); // cap to avoid jumps on tab refocus
+    const dt  = Math.max(0.001, Math.min(delta, 0.05));
+    const cur = motion.industryFloat;
 
-    // --- Morph state: lerp between targets[lo] and targets[hi] ---
-    const raw = motion.industryFloat;
-    const wrapped = ((raw % targets.length) + targets.length) % targets.length;
-    const lo = Math.floor(wrapped);
-    const hi = (lo + 1) % targets.length;
-    const frac = wrapped - lo;
+    // Instantaneous morph speed, smoothed so brief stalls don't flash
+    const rawSpeed = Math.abs(cur - prevIndustry.current) / dt;
+    const smoothed = THREE.MathUtils.damp(
+      uniforms.uMorphSpeed.value,
+      rawSpeed,
+      6,
+      dt,
+    );
 
-    // Noise peaks at mid-transition (frac = 0.5), fades to 0 at settled
-    const noiseAmp = 0.18 * (1 - Math.abs(frac - 0.5) * 2);
+    uniforms.uIndustry.value   = cur;
+    uniforms.uMorphSpeed.value = smoothed;
+    uniforms.uTime.value       = state.clock.elapsedTime;
 
-    // Single exponential-damping coefficient computed once per frame
-    const lambda = 3.2;
-    const lerpAmt = 1 - Math.exp(-lambda * dt);
-
-    const A = targets[lo];
-    const B = targets[hi];
-    const C = currents;
-
-    for (let i = 0; i < COUNT; i++) {
-      const i3 = i * 3;
-
-      // Cross-target position (straight lerp in flat buffers, no alloc)
-      const tx = A[i3] * (1 - frac) + B[i3] * frac;
-      const ty = A[i3 + 1] * (1 - frac) + B[i3 + 1] * frac;
-      const tz = A[i3 + 2] * (1 - frac) + B[i3 + 2] * frac;
-
-      // Organic turbulence during transition
-      const off = offsets[i];
-      const nx = noise3(tx * 0.5 + off, t * 0.4, tz) * noiseAmp;
-      const ny = noise3(ty + off, t * 0.3, tx) * noiseAmp;
-      const nz = noise3(tz * 0.5 + off, t * 0.35, ty) * noiseAmp;
-
-      // Critically-damped approach to the (target + noise) position
-      C[i3] += (tx + nx - C[i3]) * lerpAmt;
-      C[i3 + 1] += (ty + ny - C[i3 + 1]) * lerpAmt;
-      C[i3 + 2] += (tz + nz - C[i3 + 2]) * lerpAmt;
-
-      // Write instance matrix via shared dummy
-      dummy.position.set(C[i3], C[i3 + 1], C[i3 + 2]);
-      // Slight per-particle spin — reads as oriented "wire" segments
-      dummy.rotation.set(t * 0.35 + off, t * 0.22 + off * 0.7, 0);
-      const s = 0.045 + (Math.sin(t * 0.6 + off) * 0.5 + 0.5) * 0.02;
-      dummy.scale.setScalar(s);
-      dummy.updateMatrix();
-      m.setMatrixAt(i, dummy.matrix);
-    }
-
-    m.instanceMatrix.needsUpdate = true;
+    prevIndustry.current = cur;
   });
 
   return (
-    <instancedMesh
-      ref={mesh}
-      args={[undefined, undefined, COUNT]}
-      frustumCulled={false}
-    >
-      {/* Thin cylinder reads as a wire segment. 8 sides = ~38k tris
-          for 2400 instances, well under any GPU budget. */}
-      <cylinderGeometry args={[0.5, 0.5, 2.2, 8]} />
-      <meshStandardMaterial
-        color="#c8ced6"
-        metalness={0.95}
-        roughness={0.22}
-        emissive="#ff4d1f"
-        emissiveIntensity={0.12}
+    <mesh geometry={geometry} frustumCulled={false}>
+      <shaderMaterial
+        ref={material}
+        vertexShader={vertexShader}
+        fragmentShader={fragmentShader}
+        uniforms={uniforms}
+        transparent={false}
       />
-    </instancedMesh>
+    </mesh>
   );
 }
