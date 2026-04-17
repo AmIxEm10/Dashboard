@@ -15,6 +15,12 @@ type MotionState = {
   scrollProgress: number; // 0 → 1 across the hero
   scrollY: number; // raw pixel offset
   pointerActive: boolean;
+  /**
+   * Fractional industry index — ParticleForge lerps between
+   * targets[floor(industryFloat)] and targets[ceil(industryFloat)].
+   * 0 = chaos, 1 = automobile, 2 = aéronautique, 3 = médical.
+   */
+  industryFloat: number;
 };
 
 export const motion: MotionState = {
@@ -23,6 +29,7 @@ export const motion: MotionState = {
   scrollProgress: 0,
   scrollY: 0,
   pointerActive: false,
+  industryFloat: 0,
 };
 
 let installed = false;
