@@ -3,129 +3,111 @@
 @tailwind utilities;
 
 :root {
-  --bg: #0c0a09;
-  --bg-elev: #14110f;
-  --ink: #ede6db;
-  --ink-muted: #8a8278;
-  --ink-dim: #5c554d;
-  --line: rgba(237, 230, 219, 0.08);
-  --line-strong: rgba(237, 230, 219, 0.16);
-  --ember: #f96e46;
-  --ember-glow: rgba(249, 110, 70, 0.18);
+  --bg: #070709;
+  --surface: #0b0c0f;
+  --surface-elev: #111318;
+  --ink: #e4e7ec;
+  --ink-dim: #8a919c;
+  --ink-faint: #4a4f5a;
+  --line: rgba(228, 231, 236, 0.08);
+  --line-strong: rgba(228, 231, 236, 0.16);
+  --ignition: #ff4d1f;
+  --ignition-glow: rgba(255, 77, 31, 0.35);
 }
 
-:root[data-theme="light"] {
-  --bg: #f5efe6;
-  --bg-elev: #ede6db;
-  --ink: #1a1511;
-  --ink-muted: #6a6056;
-  --ink-dim: #9a928a;
-  --line: rgba(26, 21, 17, 0.1);
-  --line-strong: rgba(26, 21, 17, 0.2);
-  --ember: #c94f2b;
-  --ember-glow: rgba(201, 79, 43, 0.18);
+html,
+body {
+  height: 100%;
 }
 
 html {
-  scroll-behavior: smooth;
   color-scheme: dark;
-}
-
-:root[data-theme="light"] {
-  color-scheme: light;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* Lenis owns scroll; keep native smooth off */
+  scroll-behavior: auto;
 }
 
 body {
   background: var(--bg);
   color: var(--ink);
-  font-feature-settings: "ss01", "ss02", "liga", "calt";
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  font-family: var(--font-body);
-  position: relative;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11", "calt";
+  overflow-x: hidden;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.35;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.95  0 0 0 0 0.9  0 0 0 0 0.85  0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  mix-blend-mode: overlay;
+/* Lenis smooth scroll bindings */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 ::selection {
-  background: var(--ember);
+  background: var(--ignition);
   color: var(--bg);
+}
+
+/* Subtle grid texture for industrial feel */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: 80px 80px;
+  background-position: center center;
 }
 
 @layer components {
   .container-page {
-    @apply mx-auto w-full max-w-[1400px] px-6 sm:px-10;
+    @apply mx-auto w-full max-w-[1440px] px-6 sm:px-10;
   }
   .eyebrow {
-    @apply font-mono text-xs uppercase tracking-[0.18em] text-[color:var(--ink-muted)];
+    @apply font-mono text-xs uppercase tracking-widest text-steel-400;
   }
   .display {
     font-family: var(--font-display);
     font-optical-sizing: auto;
-    letter-spacing: -0.02em;
-    line-height: 0.95;
+    letter-spacing: -0.04em;
+    line-height: 0.92;
+    font-weight: 500;
   }
-  .italic-serif {
-    font-family: var(--font-italic);
-    font-style: italic;
-  }
-  .rule {
+  .hairline {
     @apply h-px w-full bg-[color:var(--line)];
   }
-  .rule-strong {
-    @apply h-px w-full bg-[color:var(--line-strong)];
-  }
   .chip {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-[color:var(--line-strong)] px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-[color:var(--ink-muted)];
+    @apply inline-flex items-center gap-1.5 rounded-full border border-[color:var(--line-strong)] bg-[color:var(--surface-elev)]/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-steel-300 backdrop-blur;
   }
   .btn-primary {
-    @apply inline-flex items-center gap-2 rounded-full bg-[color:var(--ember)] px-6 py-3 font-mono text-xs uppercase tracking-widest text-[#0c0a09] transition-all hover:scale-[1.02] hover:brightness-110;
+    @apply inline-flex items-center gap-3 rounded-full bg-ignition px-6 py-3 font-mono text-xs uppercase tracking-widest text-carbon-950 transition-transform will-change-transform hover:scale-[1.02];
   }
   .btn-ghost {
-    @apply inline-flex items-center gap-2 rounded-full border border-[color:var(--line-strong)] px-6 py-3 font-mono text-xs uppercase tracking-widest text-[color:var(--ink)] transition-colors hover:bg-[color:var(--bg-elev)];
-  }
-  .link-underline {
-    @apply relative inline-block after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-100 after:bg-current after:transition-transform hover:after:origin-right hover:after:scale-x-0;
+    @apply inline-flex items-center gap-3 rounded-full border border-[color:var(--line-strong)] px-6 py-3 font-mono text-xs uppercase tracking-widest text-steel-100 transition-colors hover:border-ignition hover:text-ignition;
   }
 }
 
 @layer utilities {
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .no-scrollbar {
-    scrollbar-width: none;
-  }
   .text-balance {
     text-wrap: balance;
   }
   .text-pretty {
     text-wrap: pretty;
   }
-  .radial-ember {
+  .radial-ignition {
     background: radial-gradient(
-      50% 50% at 50% 0%,
-      var(--ember-glow) 0%,
+      40% 50% at 50% 40%,
+      var(--ignition-glow) 0%,
       transparent 70%
     );
   }
-}
-
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee 40s linear infinite;
-}
-
-.marquee:hover .marquee-track {
-  animation-play-state: paused;
+  .mask-fade-b {
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  }
 }

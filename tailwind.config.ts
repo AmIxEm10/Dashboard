@@ -5,31 +5,40 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: {
-          DEFAULT: "#ede6db",
-          muted: "#8a8278",
-          dim: "#5c554d",
+        carbon: {
+          950: "#070709",
+          900: "#0b0c0f",
+          800: "#111318",
+          700: "#1a1d24",
+          600: "#262a33",
         },
-        paper: "#0c0a09",
-        surface: "#14110f",
-        ember: {
-          DEFAULT: "#f96e46",
-          dim: "#c94f2b",
-          glow: "rgba(249, 110, 70, 0.15)",
+        steel: {
+          400: "#8a919c",
+          300: "#a6adb8",
+          200: "#c8ced6",
+          100: "#e4e7ec",
         },
-        line: "rgba(237, 230, 219, 0.08)",
+        ignition: {
+          DEFAULT: "#ff4d1f",
+          500: "#ff4d1f",
+          400: "#ff7040",
+          600: "#d93b12",
+          glow: "rgba(255, 77, 31, 0.35)",
+        },
       },
       fontFamily: {
-        display: ["var(--font-display)", "Georgia", "serif"],
-        italic: ["var(--font-italic)", "Georgia", "serif"],
-        body: ["var(--font-body)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "system-ui", "sans-serif"],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
+      },
+      letterSpacing: {
+        tightest: "-0.04em",
+        widest: "0.22em",
       },
       animation: {
         "fade-in": "fadeIn 0.8s ease-out forwards",
-        "slide-up": "slideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards",
-        marquee: "marquee 40s linear infinite",
-        flicker: "flicker 3s ease-in-out infinite",
+        "slide-up": "slideUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards",
+        "scan": "scan 6s linear infinite",
+        "pulse-dot": "pulseDot 2s ease-in-out infinite",
       },
       keyframes: {
         fadeIn: {
@@ -37,16 +46,16 @@ const config: Config = {
           "100%": { opacity: "1" },
         },
         slideUp: {
-          "0%": { opacity: "0", transform: "translateY(24px)" },
+          "0%": { opacity: "0", transform: "translateY(40px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
-        marquee: {
-          "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-50%)" },
+        scan: {
+          "0%": { transform: "translateY(-100%)" },
+          "100%": { transform: "translateY(100%)" },
         },
-        flicker: {
-          "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0.7" },
+        pulseDot: {
+          "0%, 100%": { opacity: "1", transform: "scale(1)" },
+          "50%": { opacity: "0.5", transform: "scale(0.8)" },
         },
       },
     },

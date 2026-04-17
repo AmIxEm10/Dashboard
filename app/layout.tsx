@@ -1,58 +1,38 @@
 import type { Metadata } from "next";
-import { Fraunces, Instrument_Serif, JetBrains_Mono, Manrope } from "next/font/google";
+import { Bricolage_Grotesque, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import ThemeScript from "@/components/ThemeScript";
+import LenisProvider from "@/components/providers/LenisProvider";
+import SceneCanvas from "@/components/three/SceneCanvas";
+import Navbar from "@/components/ui/Navbar";
 
-const display = Fraunces({
+const display = Bricolage_Grotesque({
   subsets: ["latin"],
   variable: "--font-display",
   display: "swap",
-  axes: ["opsz", "SOFT"],
 });
 
-const italicFont = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
-  style: "italic",
-  variable: "--font-italic",
-  display: "swap",
-});
-
-const mono = JetBrains_Mono({
+const mono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
   display: "swap",
 });
 
-const body = Manrope({
-  subsets: ["latin"],
-  variable: "--font-body",
-  display: "swap",
-});
-
 export const metadata: Metadata = {
   title: {
-    default: "Alex Dupont — Développeur Full Stack",
-    template: "%s · Alex Dupont",
+    default: "CGR International — Precision Engineering",
+    template: "%s · CGR International",
   },
   description:
-    "Portfolio d'Alex Dupont, développeur full stack basé à Paris. Produits web, design system, architectures type-safe.",
+    "CGR International — leader mondial de l'ingénierie, de la fabrication de ressorts, du formage à froid et des composants mécaniques de précision.",
   keywords: [
-    "développeur",
-    "full stack",
-    "Next.js",
-    "React",
-    "TypeScript",
-    "portfolio",
+    "CGR International",
+    "ressorts",
+    "formage à froid",
+    "composants mécaniques",
+    "automobile",
+    "aéronautique",
+    "précision",
   ],
-  authors: [{ name: "Alex Dupont" }],
-  openGraph: {
-    title: "Alex Dupont — Développeur Full Stack",
-    description: "Portfolio, projets et notes d'un dev basé à Paris.",
-    type: "website",
-  },
 };
 
 export default function RootLayout({
@@ -61,18 +41,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="fr"
-      className={`${display.variable} ${italicFont.variable} ${mono.variable} ${body.variable}`}
-      suppressHydrationWarning
-    >
-      <head>
-        <ThemeScript />
-      </head>
-      <body className="flex min-h-screen flex-col">
-        <Navbar />
-        <main className="relative z-10 flex-1">{children}</main>
-        <Footer />
+    <html lang="fr" className={`${display.variable} ${mono.variable}`}>
+      <body>
+        <LenisProvider>
+          {/* Global WebGL canvas stays mounted across route changes. */}
+          <SceneCanvas />
+          <Navbar />
+          <main className="relative z-10">{children}</main>
+        </LenisProvider>
       </body>
     </html>
   );
