@@ -4,6 +4,7 @@ import "./globals.css";
 import LenisProvider from "@/components/providers/LenisProvider";
 import SceneCanvas from "@/components/three/SceneCanvas";
 import Navbar from "@/components/ui/Navbar";
+import Preloader from "@/components/ui/Preloader";
 
 const display = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -48,6 +49,9 @@ export default function RootLayout({
           <SceneCanvas />
           <Navbar />
           <main className="relative z-10">{children}</main>
+          {/* Mechanical shutter preloader — sits above everything until
+              the loading manager reports ready + min dwell has elapsed. */}
+          <Preloader />
         </LenisProvider>
       </body>
     </html>
