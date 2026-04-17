@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 /**
- * Footer — industrial closer. OLED-black background, Geist Mono
+ * Footer — industrial closer. OLED-black background, JetBrains Mono
  * typography, ignition-orange on hover. Certifications are the
  * primary asset here — they are what a B2B buyer scans for first.
  */

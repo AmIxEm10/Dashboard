@@ -119,7 +119,7 @@ export default function SceneCanvas() {
               mipmap blur) so the hot particles still glow without
               blowing the fragment-shader budget of a phone. */}
           {isMobile ? (
-            <EffectComposer multisampling={0} disableNormalPass>
+            <EffectComposer multisampling={0}>
               <Bloom
                 intensity={0.7}
                 luminanceThreshold={0.9}
@@ -128,7 +128,7 @@ export default function SceneCanvas() {
               />
             </EffectComposer>
           ) : (
-            <EffectComposer multisampling={0} disableNormalPass>
+            <EffectComposer multisampling={0}>
               <Bloom
                 mipmapBlur
                 intensity={1.2}

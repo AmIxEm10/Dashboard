@@ -23,7 +23,7 @@ export default function InnovationViewer() {
     >
       {/* Cursor hint */}
       <div
-        className={`pointer-events-none absolute left-4 top-4 z-10 flex items-center gap-2 rounded-full border border-[color:var(--line-strong)] bg-[color:var(--bg)]/80 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest backdrop-blur transition-opacity ${
+        className={`pointer-events-none absolute left-4 top-4 z-10 flex items-center gap-2 rounded-full border border-[color:var(--line-strong)] bg-carbon-950/80 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest backdrop-blur transition-opacity ${
           hovering ? "opacity-40" : "opacity-100"
         }`}
       >
@@ -94,7 +94,7 @@ export default function InnovationViewer() {
             autoRotateSpeed={0.6}
           />
 
-          <EffectComposer multisampling={0} disableNormalPass>
+          <EffectComposer multisampling={0}>
             <Bloom
               mipmapBlur
               intensity={1.4}
