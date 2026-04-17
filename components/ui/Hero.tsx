@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 
 /**
@@ -85,12 +86,12 @@ export default function Hero() {
             </p>
 
             <div data-reveal className="mt-12 flex flex-wrap items-center gap-4">
-              <a href="/expertises" className="btn-primary">
-                ✦ Découvrir nos expertises
-              </a>
-              <a href="/contact" className="btn-ghost">
+              <Link href="/industries" className="btn-primary">
+                ✦ Explorer nos industries
+              </Link>
+              <Link href="/contact" className="btn-ghost">
                 → Parler à un ingénieur
-              </a>
+              </Link>
             </div>
           </div>
 
